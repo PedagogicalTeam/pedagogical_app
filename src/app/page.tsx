@@ -1,91 +1,30 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+'use client';
+import { useState, useEffect } from 'react';
 
-const inter = Inter({ subsets: ['latin'] })
+import styles from './page.module.css';
+import type { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
+import { Excalidraw } from "@excalidraw/excalidraw";
+import * as initialData from "../dummyData/intialData.json"
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+	// need wait until doc mounts before rendering Excalidraw as not compatible with SSR
+  // Type 'typeof import("/Users/ailishmccarthy/Code/pedagogical/pedagogical_app/node_modules/@excalidraw/excalidraw/types/packages/excalidraw/index")' provides no match for the signature '(prevState: null): null'.
+  
+	const [Comp, setComp] = useState<ExcalidrawElement | undefined>(undefined);
+
+  useEffect(() => {
+    import("@excalidraw/excalidraw").then((comp) => setComp(comp.default));
+  }, []);
+
+	return (
+		<main className={styles.main}>
+			<div className={styles.description}>
+				<h1>🎓 Welcome to Pedagogical 🎓</h1>
+			</div>
+			<div className={styles.excalidrawwrapper}>
+				{/* {Comp && <Comp initialData={initialData} />} */}
+          <Excalidraw initialData={initialData}/>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+		</main>
+	);
 }
